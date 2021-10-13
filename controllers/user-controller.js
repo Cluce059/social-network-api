@@ -61,6 +61,12 @@ const userController = {
         })
         .catch(err => res.status(400).json(err));
     }
+
+    /*/api/users/:userId/friends/:friendId
+
+POST to add a new friend to a user's friend list
+
+DELETE to remove a friend from a user's friend list */
 };
 
 module.exports = userController;
