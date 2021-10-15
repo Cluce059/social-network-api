@@ -33,7 +33,7 @@ const thoughtController = {
             });
     },
 
-    createThought( { body }, res){
+    createThought( {params, body }, res){
         Thought.create(body)
         .then(({ _id }) => {
             return User.findOneAndUpdate(
@@ -52,8 +52,12 @@ const thoughtController = {
     .catch(err => res.json(err));
 },
 
-    updateThought( {params, body }, res ){
-        Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
+    updateThought( {params, body}, res ){
+        Thought.findOneAndUpdate(
+            { _id: params.id }, 
+            body, 
+            { new: true, runValidators: true }
+            )
         .then(dbThoughtData => {
             if(!dbThoughtData){
                 res.status(404).json({ message: 'Error in thought creation'});
@@ -64,27 +68,21 @@ const thoughtController = {
     .catch(err => res.json(err));
 },
 //PUT UPDATE THOUGHT - ADD REACTION
-createReaction({params, body}, res){
-    Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
-    then(dbThoughtData => {
+addReaction({params, body}, res){
+ Thought.findOneAndUpdate(
+            { _id: params.thoughtId }, 
+            {$push: {reactions: body}}, 
+            { new: true, runValidators: true }
+    )
+    .then(dbThoughtData => {
         if(!dbThoughtData){
             res.status(404).json({ message: 'Error in thought creation'});
             return;
         }
         res.json(dbThoughtData);
-})
-.catch(err => res.json(err));
-},
-    deleteThought( { params }, res ){
-        Thought.findOneAndDelete({ _id: params.id })
-        .then(dbThoughtData => {
-            if(!dbThoughtData){
-                res.status(404).json({ message: 'Error in thought creation'});
-                return;
-            }
-            res.json(dbThoughtData);
     })
-    },
+        .catch(err => res.json(err));
+},
     ///PUT UPDATE THOUGHT - DELETE REACTION ATTR
     deleteReaction({params, body}, res){
         Thought.findOneAndUpdate(
@@ -95,13 +93,17 @@ createReaction({params, body}, res){
         .then(dbThoughtdata => res.json(dbThoughtdata))
         .catch(err => res.json(err));
     },
-
-    /*thoughts/:thoughtId/reactionId
-
-POST to create a reaction stored in a single thought's reactions array field
-
-DELETE to pull and remove a reaction by the reaction's reactionId value
- */
+    deleteThought( { params }, res ){
+        Thought.findOneAndDelete({ _id: params.id })
+        .then(dbThoughtData => {
+            if(!dbThoughtData){
+                res.status(404).json({ message: 'Error in thought creation'});
+                return;
+            }
+            res.json(dbThoughtData);
+    })
+    .catch(err => res.json(err));
+    }
 
 };
 

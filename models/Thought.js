@@ -9,7 +9,8 @@ const ReactionSchema = new Schema({
     reactionBody: {
         type: String,
         required: true,
-        validate: [({ length }) => length > 1 || length < 280, 'Keep reactions less then 280 characters']
+        validate: [({ length }) => length > 1 || length < 280, 'Keep reactions less then 280 characters'],
+        trim: true
     },
     username: {
         type: String,
@@ -20,7 +21,13 @@ const ReactionSchema = new Schema({
         default: Date.now,
         get: createdVal => dateFormat(createdVal)
     }
-});
+    },
+    {
+        toJSON: {
+            getters: true
+        }
+    }
+);
 
 const ThoughtSchema = new Schema({
     thoughtText: {
