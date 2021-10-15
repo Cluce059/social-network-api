@@ -6,20 +6,23 @@ const {
     createThought,
     updateThought,
     deleteThought
-} = require('../controllers/thought-controller')
+} = require('../../controllers/thought-controller')
 
 //api/thoughts
 
 router
 .route('/')
 .get(getAllThoughts)
+
+router
+.route('/:userId')
 .post(createThought)
 
 
 //api/thoughts/:id
 
 router
-.route('/:id')
+.route('/:userId/:reactionId')
 .get(getThoughtById)
 .put(updateThought)
 .delete(deleteThought)

@@ -4,8 +4,7 @@ const dateFormat = require('../utils/dateFormat');
 const ReactionSchema = new Schema({
     reactionId: {
         type: Schema.Types.ObjectId,
-        //default: ObjectId 
-        //???
+        default: () => new Types.ObjectId()
     },
     reactionBody: {
         type: String,
@@ -26,8 +25,8 @@ const ReactionSchema = new Schema({
 const ThoughtSchema = new Schema({
     thoughText: {
         type: String,
-        validate: [({ length }) => length > 1 || length < 280, 'Thoughts may not exceed 280 characters'],
-        required: 'You must enter text'
+        //validate: [({ length }) => length > 1 || length < 280, 'Thoughts may not exceed 280 characters'],
+        //required: 'You must enter text'
     },
     createdAt: {
         type: Date,
@@ -52,3 +51,9 @@ const ThoughtSchema = new Schema({
 ThoughtSchema.virtual('reactionCount').get(function(){
     return this.reactions.length;
 });
+
+const Thought = model('Thought', ThoughtSchema);
+
+const Reaction = model('Reaction', ReactionSchema);
+
+module.exports = { Thought, Reaction };
