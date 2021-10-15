@@ -1,10 +1,16 @@
-const { Thought, Reaction } = require('../models/Thought');
+const Thought = require('../models/Thought');
 const mongoose = require('mongoose');
 
 
 const thoughtController = {
     getAllThoughts(req, res){
         Thought.find({})
+        .populate({
+            path: 'thoughts',
+            select: '-__v'
+        })
+        .select('-__v')
+        .sort({ _id: -1 })
         .then(dbThoughtData => res.json(dbThoughtData))
         .catch(err => {
             console.log(err);
@@ -19,7 +25,7 @@ const thoughtController = {
                     res.status(404).json({ message: 'no thought with that id'});
                     return;
                 }
-                res.json(dbThoughtdata)
+                res.json(dbThoughtData)
         })
             .catch(err => {
                 console.log(err);

@@ -23,10 +23,10 @@ const ReactionSchema = new Schema({
 });
 
 const ThoughtSchema = new Schema({
-    thoughText: {
+    thoughtText: {
         type: String,
-        //validate: [({ length }) => length > 1 || length < 280, 'Thoughts may not exceed 280 characters'],
-        //required: 'You must enter text'
+        validate: [({ length }) => length > 1 || length < 280, 'Thoughts may not exceed 280 characters'],
+        required: true
     },
     createdAt: {
         type: Date,
@@ -54,6 +54,4 @@ ThoughtSchema.virtual('reactionCount').get(function(){
 
 const Thought = model('Thought', ThoughtSchema);
 
-const Reaction = model('Reaction', ReactionSchema);
-
-module.exports = { Thought, Reaction };
+module.exports = Thought ;
