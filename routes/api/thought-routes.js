@@ -29,7 +29,7 @@ router
 .delete(deleteThought);
 
 router
-.route('/:thoughtId/reactions')
+.route('/:thoughtId/reactions/reactionId')
 .post(addReaction)
 .delete(deleteReaction);
 
