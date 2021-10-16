@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const { User, Types } = require('../models');
 const mongoose = require('mongoose');
 
 const userController = {
@@ -63,46 +63,43 @@ const userController = {
         .catch(err => res.status(400).json(err));
     },
 
-    addFriend({ params }, res){
+    addFriend({params}, res) {
         User.findOneAndUpdate(
-            {_id: params.id },
-            { $addToSet: { friends: params.friendId }},
+            {_id: params.id}, 
+            {$push: { friends: params.friendId}}, 
             {new: true}
-        )
+            )
+        .populate({path: 'friends', select: ('-__v')})
         .select('-__v')
-        .then(dbUserData => {
-            if (!dbUserData) {
-                res.status(404).json({ message: "No user found with this id!" });
+        .then(dbUsersData => {
+            if (!dbUsersData) {
+                res.status(404).json({message: 'no user with this id'});
                 return;
-              }
-              res.json(dbUserData);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-          });
-    },
-    removeFriend({ params }, res) {
-        User.findByIdAndUpdate(
-          { _id: params.id },
-          { $pull: { friends: params.friendId } },
-          { new: true, runValidators: true }
-        )
-          .select('-__v')
-          .then((dbUserData) => {
-            if (!dbUserData) {
-              res.status(404).json({ message: "No friend found with this id!" });
-              return;
             }
-            res.json(dbUserData);
-          })
-          .catch((err) => res.status(400).json(err));
-      }
+        res.json(dbUsersData);
+        })
+        .catch(err => res.json(err));
+    },
 
-    /*/api/users/:userId/friends/:friendId
 
-POST to add a new friend to a user's friend list
+    removeFriend({ params }, res) {
+        User.findOneAndUpdate(
+            {_id: params.id}, 
+            {$pull: { friends: params.friendId}}, 
+            {new: true}
+            )
+        .populate({path: 'friends', select: '-__v'})
+        .select('-__v')
+        .then(dbUsersData => {
+            if(!dbUsersData) {
+                res.status(404).json({message: 'no user with this id'});
+                return;
+            }
+            res.json(dbUsersData);
+        })
+        .catch(err => res.status(400).json(err));
+    }
 
-DELETE to remove a friend from a user's friend list */
 };
 
 module.exports = userController;
