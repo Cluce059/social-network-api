@@ -100,17 +100,15 @@ addReaction({params, body}, res){
         .catch(err => res.json(err));
 },
     ///PUT UPDATE THOUGHT - DELETE REACTION ATTR
-    deleteReaction({params, body}, res){
+    deleteReaction({ params }, res) {
         Thought.findOneAndUpdate(
-        {_id: params.thoughtId },
-        { $pull: {reaction: { reactionId: params.reactionId }}},
-        { new: true }
+            { _id: params.thoughtId },
+            { $pull: { reactions: { reactionId: params.reactionId } } },
+            { new: true }
         )
-        .then(dbThoughtdata => res.json(dbThoughtdata))
-        .catch(err => res.json(err));
+            .then(dbThoughtData => res.json(dbThoughtData))
+            .catch(err => res.json(err));
     }
-   
-
 };
 
 module.exports = thoughtController;
