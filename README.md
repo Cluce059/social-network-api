@@ -2,7 +2,7 @@
   ![badge](https://img.shields.io/badge/license--blueviolet)
   <br />
   ## Description
-  🔍 A Mongodb Basically available, soft state, and eventually consistent (BASE) application that allows creation of users, their thoughts, reactions to those thoughts, and friends to th user. The 
+  🔍 A Mongodb basically available, soft state, and eventually consistent (BASE) application that allows creation of users, their thoughts, reactions to those thoughts, and friends to th user. The 
   ## Table of Contents
   - [Description](#description)
   - [Installation](#installation)
